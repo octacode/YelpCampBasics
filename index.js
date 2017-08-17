@@ -9,14 +9,18 @@ mongoose.connect("mongodb://localhost/yelp_camp", {
 
 var campgroundSchema = new mongoose.Schema({
   name: String,
-  image: String
+  image: String,
+  description: String
 })
 
 var Campground = mongoose.model("Campground", campgroundSchema);
 
+// for(var i = 0;i<10;i++)
 // Campground.create(
 //   {
-//     name: "Cat", image: "http://fakeimg.pl/350x200/?text=Cat&font=lobster"
+//     name: "Cat"+i,
+//     image: "http://fakeimg.pl/350x200/?text=Cat"+i,
+//     description: "Grouchy"+10*i
 //   },function(err, campground){
 //     if(err){
 //       console.log("Something went wrong.")
@@ -49,13 +53,26 @@ app.get('/campgrounds/new', function(req,res){
   res.render('submit_a_new_campground_form.ejs');
 });
 
+app.get('/campgrounds/:id', function(req,res){
+  Campground.findById(req.params.id, function(err, foundCampGround){
+    if(err){
+      console.log("Nothing found");
+    }
+    else{
+      res.render('showCampground.ejs', {campground: foundCampGround});
+    }
+  });
+});
+
 app.post('/campgrounds', function(req,res){
    var name = req.body.name;
    var image = req.body.image;
+   var description = req.body.description;
 
    Campground.create({
      name: name,
-     image: image
+     image: image,
+     description: description
    }, function(err, campground){
       if(err)
         console.log("Error while inserting!");
