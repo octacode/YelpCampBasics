@@ -3,7 +3,8 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     Campground = require("./models/campgroundModel.js"),
-    seedDb = require("./seeds.js");
+    seedDb = require("./seeds.js"),
+    Comment = require("./models/comment.js");
     ;
 
 mongoose.connect("mongodb://localhost/yelp_camp", {
@@ -24,13 +25,13 @@ app.get('/campgrounds', function(req,res){
         console.log("ERROR fetching from data base.");
       }
       else{
-        res.render('campground.ejs', {campgrounds: campgrounds});
+        res.render('campgrounds/campground.ejs', {campgrounds: campgrounds});
       }
   });
 });
 
 app.get('/campgrounds/new', function(req,res){
-  res.render('submit_a_new_campground_form.ejs');
+  res.render('campgrounds/submit_a_new_campground_form.ejs');
 });
 
 app.get('/campgrounds/:id', function(req,res){
@@ -40,7 +41,7 @@ app.get('/campgrounds/:id', function(req,res){
     }
     else{
       console.log(foundCampGround);
-      res.render('showCampground.ejs', {campground: foundCampGround});
+      res.render('campgrounds/showCampground.ejs', {campground: foundCampGround});
     }
   });
 });
@@ -61,6 +62,36 @@ app.post('/campgrounds', function(req,res){
         res.redirect('/campgrounds');
       }
    });
+});
+
+//==========================================
+//COMMENT ROUTES
+//==========================================
+
+app.get('/campgrounds/:id/comments/new', (req,res)=>{
+  Campground.findById(req.params.id, (err,campground)=>{
+    if(err)
+      console.log(err);
+    else {
+      res.render('comments/new.ejs', {campground: campground});
+    }
+  });
+});
+
+app.post('/campgrounds/:id/comments', (req,res)=>{
+  Campground.findById(req.params.id, (err, campground)=>{
+    if(err) {
+      console.log(err);
+    }
+    else {
+      console.log(req.body.comment);
+      Comment.create(req.body.comment, (err, comment)=>{
+        campground.comments.push(comment);
+        campground.save();
+        res.redirect('/campgrounds/'+req.params.id);
+      });
+    }
+  });
 });
 
 app.listen(1313, function(){
