@@ -27,6 +27,11 @@ app.use(require('express-session')({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use((req,res, next)=>{
+  res.locals.currentUser = req.user;
+  next();
+});
+
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -44,12 +49,12 @@ app.get('/campgrounds', function(req,res){
         console.log("ERROR fetching from data base.");
       }
       else{
-        res.render('campgrounds/campground.ejs', {campgrounds: campgrounds});
+        res.render('campgrounds/campground.ejs', {campgrounds: campgrounds, currentUser: req.user});
       }
   });
 });
 
-app.get('/campgrounds/new', function(req,res){
+app.get('/campgrounds/new', isLoggedIn,function(req,res){
   res.render('campgrounds/submit_a_new_campground_form.ejs');
 });
 
@@ -65,7 +70,7 @@ app.get('/campgrounds/:id', function(req,res){
   });
 });
 
-app.post('/campgrounds', function(req,res){
+app.post('/campgrounds', isLoggedIn, function(req,res){
    var name = req.body.name;
    var image = req.body.image;
    var description = req.body.description;
@@ -87,7 +92,7 @@ app.post('/campgrounds', function(req,res){
 //COMMENT ROUTES
 //==========================================
 
-app.get('/campgrounds/:id/comments/new', (req,res)=>{
+app.get('/campgrounds/:id/comments/new', isLoggedIn ,(req,res)=>{
   Campground.findById(req.params.id, (err,campground)=>{
     if(err)
       console.log(err);
@@ -97,7 +102,7 @@ app.get('/campgrounds/:id/comments/new', (req,res)=>{
   });
 });
 
-app.post('/campgrounds/:id/comments', (req,res)=>{
+app.post('/campgrounds/:id/comments', isLoggedIn,(req,res)=>{
   Campground.findById(req.params.id, (err, campground)=>{
     if(err) {
       console.log(err);
@@ -126,7 +131,7 @@ app.post('/register', (req,res)=>{
   User.register(newUser, req.body.password, (err, user)=>{
     if(err){
         console.log(err);
-        res.redirect('/');
+        res.redirect('/campgrounds');
     }
     passport.authenticate("local")(req,res, function(){
           res.redirect('/campgrounds');
@@ -146,6 +151,22 @@ app.post('/login', passport.authenticate("local",
           successRedirect: '/campgrounds',
           failureRedirect: '/login'
         }),(req,res)=>{});
+
+//==================
+//LOGOUT
+//==================
+app.get('/logout', (req,res)=>{
+  req.logout();
+  res.redirect('/campgrounds');
+});
+
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+      return next();
+    }
+    res.redirect('/login');
+}
 
 app.listen(1313, function(){
   console.log('Yelp Camp server sunn rha hai...')
