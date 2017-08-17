@@ -1,36 +1,16 @@
 var express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    Campground = require("./models/campgroundModel.js"),
+    seedDb = require("./seeds.js");
+    ;
 
 mongoose.connect("mongodb://localhost/yelp_camp", {
   useMongoClient: true
 });
 
-var campgroundSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String
-})
-
-var Campground = mongoose.model("Campground", campgroundSchema);
-
-// for(var i = 0;i<10;i++)
-// Campground.create(
-//   {
-//     name: "Cat"+i,
-//     image: "http://fakeimg.pl/350x200/?text=Cat"+i,
-//     description: "Grouchy"+10*i
-//   },function(err, campground){
-//     if(err){
-//       console.log("Something went wrong.")
-//     }
-//     else{
-//       console.log("The new campground inserted is: ");
-//       console.log(campground);
-//     }
-//   }
-// )
+seedDb();
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -54,11 +34,12 @@ app.get('/campgrounds/new', function(req,res){
 });
 
 app.get('/campgrounds/:id', function(req,res){
-  Campground.findById(req.params.id, function(err, foundCampGround){
+  Campground.findById(req.params.id).populate('comments').exec(function(err, foundCampGround){
     if(err){
       console.log("Nothing found");
     }
     else{
+      console.log(foundCampGround);
       res.render('showCampground.ejs', {campground: foundCampGround});
     }
   });
