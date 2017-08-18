@@ -88,6 +88,15 @@ router.post('/:id/update', isLoggedIn, (req,res)=>{
   });
 });
 
+router.post('/:id/delete', isLoggedIn, (req,res)=>{
+  Campground.findByIdAndRemove(req.params.id, (err)=>{
+    if(err)
+      console.log(err);
+    else
+      res.redirect('/campgrounds');
+  });
+});
+
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
       return next();
