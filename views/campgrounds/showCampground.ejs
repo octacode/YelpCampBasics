@@ -13,13 +13,13 @@
       <div class="thumbnail">
         <img class="img-responsive" src="<%= campground.image %>" alt="No image found">
         <div class="caption-full">
-          <h4 class="pull-right">$9.00/night</h4>
+          <h4 class="pull-right">$<%= campground.price %>/night</h4>
           <h4><a href=""><%= campground.name %></a></h4>
           <em><p>Submitted by: <strong><%= campground.author.username %></strong></p></em>
           <p><%= campground.description %></p>
           <%if(currentUser != null || currentUser != undefined) {%>
               <%if(currentUser.id == campground.author.id){%>
-                <a class="btn btn-warning" href="#">Edit</a>
+                <a class="btn btn-warning" href="/campgrounds/<%=campground.id%>/edit">Edit</a>
               <%}%>
           <%}%>
         </div>

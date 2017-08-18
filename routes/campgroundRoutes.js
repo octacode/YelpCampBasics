@@ -33,6 +33,7 @@ router.post('/', isLoggedIn, function(req,res){
    var name = req.body.name;
    var image = req.body.image;
    var description = req.body.description;
+   var price = req.body.price;
    var author = {
      id: req.user._id,
      username: req.user.username
@@ -40,6 +41,7 @@ router.post('/', isLoggedIn, function(req,res){
    Campground.create({
      name: name,
      image: image,
+     price: price,
      description: description,
      author: author
    }, function(err, campground){
@@ -49,6 +51,41 @@ router.post('/', isLoggedIn, function(req,res){
         res.redirect('/campgrounds');
       }
    });
+});
+
+router.get('/:id/edit', isLoggedIn, (req,res)=>{
+  Campground.findById(req.params.id, (err, foundCampGround)=>{
+    if(err)
+      console.log(err);
+    else
+      res.render('campgrounds/edit.ejs', {campground: foundCampGround});
+  });
+});
+
+router.post('/:id/update', isLoggedIn, (req,res)=>{
+  var name = req.body.name;
+  var image = req.body.image;
+  var description = req.body.description;
+  var price = req.body.price;
+  var author = {
+    id: req.user._id,
+    username: req.user.username
+  };
+  var updatedCampground = {
+    name: name,
+    image: image,
+    description: description,
+    price: price,
+    author: author
+  };
+
+  Campground.findByIdAndUpdate(req.params.id, updatedCampground, (err, campground)=>{
+    if(err)
+      console.log(err);
+    else {
+      res.redirect('/campgrounds/'+req.params.id);
+    }
+  });
 });
 
 function isLoggedIn(req, res, next){
