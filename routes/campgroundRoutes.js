@@ -23,8 +23,8 @@ router.get('/:id', function(req,res){
       console.log("Nothing found");
     }
     else{
-      console.log(foundCampGround);
-      res.render('campgrounds/showCampground.ejs', {campground: foundCampGround});
+      console.log(req.user);
+      res.render('campgrounds/showCampground.ejs', {campground: foundCampGround, currentUserId: req.user});
     }
   });
 });

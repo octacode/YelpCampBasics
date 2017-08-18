@@ -17,6 +17,11 @@
           <h4><a href=""><%= campground.name %></a></h4>
           <em><p>Submitted by: <strong><%= campground.author.username %></strong></p></em>
           <p><%= campground.description %></p>
+          <%if(currentUser != null || currentUser != undefined) {%>
+              <%if(currentUser.id == campground.author.id){%>
+                <a class="btn btn-warning" href="#">Edit</a>
+              <%}%>
+          <%}%>
         </div>
       </div>
 
