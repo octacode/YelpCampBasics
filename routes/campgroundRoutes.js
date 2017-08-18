@@ -33,11 +33,15 @@ router.post('/', isLoggedIn, function(req,res){
    var name = req.body.name;
    var image = req.body.image;
    var description = req.body.description;
-
+   var author = {
+     id: req.user._id,
+     username: req.user.username
+   }
    Campground.create({
      name: name,
      image: image,
-     description: description
+     description: description,
+     author: author
    }, function(err, campground){
       if(err)
         console.log("Error while inserting!");
