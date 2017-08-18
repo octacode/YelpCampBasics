@@ -32,26 +32,26 @@ function seedDB(){
   });
 
   // Add new campgrounds
-  data.forEach((singleData)=>{
-    Campground.create(singleData, (err, campground)=>{
-      if(err)
-        console.log(err);
-      else {
-        Comment.create(
-          {
-            author: "Goku",
-            text: "This is my first comment"
-          }, function(err, comment){
-          if(err)
-            console.log(err);
-          else {
-            campground.comments.push(comment);
-            campground.save();
-          }
-        });
-      }
-    });
-  });
+  // data.forEach((singleData)=>{
+  //   Campground.create(singleData, (err, campground)=>{
+  //     if(err)
+  //       console.log(err);
+  //     else {
+  //       Comment.create(
+  //         {
+  //           author: "Goku",
+  //           text: "This is my first comment"
+  //         }, function(err, comment){
+  //         if(err)
+  //           console.log(err);
+  //         else {
+  //           campground.comments.push(comment);
+  //           campground.save();
+  //         }
+  //       });
+  //     }
+  //   });
+  // });
 
   //Add a few more comments
 }

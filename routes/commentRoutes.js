@@ -20,8 +20,12 @@ router.post('/', isLoggedIn,(req,res)=>{
     }
     else {
       Comment.create(req.body.comment, (err, comment)=>{
+        comment.author.id = req.user._id;
+        comment.author.username = req.user.username;
+        comment.save();
         campground.comments.push(comment);
         campground.save();
+        console.log(comment);
         res.redirect('/campgrounds/'+req.params.id);
       });
     }
