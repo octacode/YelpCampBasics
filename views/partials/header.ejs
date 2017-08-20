@@ -5,6 +5,7 @@
     <title>YelpCamp</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/stylesheets/main.css">
+    <script src="https://code.jquery.com/jquery-git2.min.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-default">
@@ -18,10 +19,18 @@
               <li><a href="/login">Login</a></li>
               <li><a href="/register">Sign Up</a></li>
             <%}else{%>
-              <li><a href="#">Signed in as <%=currentUser.username%></a></li>  
+              <li><a href="#">Signed in as <%=currentUser.username%></a></li>
               <li><a href="/logout">Logout</a></li>
             <%}%>
           </ul>
         </div>
       </div>
     </nav>
+    <div class="container">
+      <%if(message && message.length > 0){%>
+        <div class="alert alert-danger"><%=message%></div>
+      <%}%>
+      <%if(messageSuccess && messageSuccess.length > 0){%>
+        <div class="alert alert-success"><%=messageSuccess%></div>
+      <%}%>
+    </div>

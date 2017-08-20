@@ -8,6 +8,7 @@ var express = require('express'),
     seedDb = require("./seeds.js"),
     User = require("./models/user.js"),
     Comment = require("./models/comment.js"),
+    flash = require("connect-flash"),
     campgroundRoutes = require("./routes/campgroundRoutes.js"),
     commentRoutes = require("./routes/commentRoutes.js"),
     indexRoutes = require("./routes/indexRoutes.js");
@@ -17,6 +18,7 @@ mongoose.connect("mongodb://localhost/yelp_camp", {
 });
 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(flash());
 app.use(express.static(__dirname + "/public"));
 
 //seedDb();
@@ -31,8 +33,11 @@ app.use(require('express-session')({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use((req,res, next)=>{
   res.locals.currentUser = req.user;
+  res.locals.message = req.flash("error");
+  res.locals.messageSuccess = req.flash("success");
   next();
 });
 
