@@ -1,4 +1,4 @@
-# Octa-Color-Gamey
+# YelpCampBasics
 
 Octa-Color-Gamey is a webpage that challengers the user to guess which color is equivalent to the RGB provided code.
 
