@@ -1,6 +1,6 @@
 # YelpCampBasics
 
-Octa-Color-Gamey is a webpage that challengers the user to guess which color is equivalent to the RGB provided code.
+YelpCampBasics is a webpage made using MEN stack which authenticates the user and allows them to know about the different places they would like to visit. Users can add/edit/delete new places and comment on the present places.
 
 Visit the webpage at https://allyelpcamp.herokuapp.com/
 
