@@ -24,7 +24,7 @@ Navigate to the directory with `cd YelpCampBasics`
 * [Express.js]
 * [MongoDB]
 * [.ejs]
-* [passport.js] >> for authentication
+* [passport.js] `for authentication`
 
 ## Contributing
 
